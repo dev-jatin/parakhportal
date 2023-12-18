@@ -3,12 +3,80 @@ import {HStack,Text,Image,Button,Box} from '@chakra-ui/react'
 import AICTCLOGO from '../Images/AICTE.png'
 import SLALOGO from '../Images/SLALogo.png'
 import {Switch} from '@chakra-ui/react'
+import {useDisclosure} from '@chakra-ui/react'
 import { Radio, RadioGroup,Stack } from '@chakra-ui/react'
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from '@chakra-ui/react'
 const Assesmentquiz = () => {
 
     const [isLanguange,setIsLanguange] = useState("English")
     const [onWhichQuestion,setOnWhichQuestion] = useState(0);
     const [optionChoose,setOptionChoose] = useState('1')
+    const [questionNumber,setQuestionNumber] = useState(2) 
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = React.useRef()
+  
+
+    const assesmentData = [
+      {
+        id:0,
+        quesiton:"What is the largest internal organ in the human body? ",
+        answer:"Liver",
+        options:{
+          op1:"Lungs",
+          op2:"Heart",
+          op3:"Kidneys",
+          op4:"Liver"
+
+        },
+        isCheckedAndSaved:false,
+        isSkiped:true,
+        isSavedandReviewLater:false,
+        timeTaken:0
+      },
+      {
+        id:1,
+        quesiton:"Which of the following British presenters never presented ‘Strictly Comes Dancing’? ",
+        answer:"Tess Daly",
+        options:{
+          op1:"Claudia Winkleman",
+          op2:"Tess Daly",
+          op3:"Andrea Hamilton",
+          op4:"Stacey Dooley"
+
+        },
+        
+        isCheckedAndSaved:true,
+        isSkiped:false,
+        isSavedandReviewLater:true,
+        timeTaken:0
+      },
+      {
+        id:2,
+        quesiton:"Question 3 answer",
+        answer:"answer",
+        options:{
+          op1:"3",
+          op2:"4",
+          op3:"5",
+          op4:"6"
+
+        },
+        
+        isCheckedAndSaved:false,
+        isSkiped:false,
+        isSavedandReviewLater:true,
+        timeTaken:0
+      }
+
+    ]
   return (
    
   <HStack h={"100vh"} w={"full"} bgColor={"gray.200"} alignItems={"flex-start"} justifyContent={"flex-start"} flexDir={"column"} >
@@ -18,7 +86,7 @@ const Assesmentquiz = () => {
    <Image pl={"10px"} w={"150px"} src={SLALOGO}/>
    </HStack>
 
-   <Text color={"white"} pl={"15px"}  fontSize={"2xl"}>AI BASED PRE-LEARNING ASSESMENT</Text>
+   <Text color={"white"} pl={"15px"}  fontSize={"2xl"}>AI BASED PRE-LEARNING ASSESSMENT</Text>
 
    <Button colorScheme="orange" borderRadius={"20%"} mr={"20px"} >SUBMIT</Button>
     </HStack>
@@ -52,11 +120,11 @@ const Assesmentquiz = () => {
          <HStack w={"100%"} mt={"20px"} flexDir={"column"} h={"300px"} bgColor={"white"}  border={"2px solid #518ec4"} alignItems={"flex-start"}>
 
           <HStack w={"full"} bgColor={"gray.300"} h={"40px"} p={"10px"} borderBottom={"3px solid gray"}  >
-          <Text fontWeight={"bold"} fontSize={"20px"}>Question : {onWhichQuestion+1}</Text>
+          <Text fontWeight={"bold"} fontSize={"20px"}>Question : {questionNumber+1}</Text>
           </HStack>
 
           <HStack w={"full"} flexDir={"column"} alignItems={"flex-start"} h={"100px"}  p={"20px"}>
-           <Text fontSize={"17px"} fontWeight={"semibold"} borderBottom={"3px solid #98c5ed"}> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo odit deleniti architecto ea illum esse expedita sint et? Expedita odit provident quidem nihil blanditiis vitae aspernatur neque repudiandae veritatis ut?</Text>
+           <Text fontSize={"17px"} fontWeight={"semibold"} borderBottom={"3px solid #98c5ed"}>{assesmentData[1].quesiton}</Text>
                
                <HStack w={"100%"}>
 
@@ -67,8 +135,8 @@ const Assesmentquiz = () => {
           <Stack    >
 
           
-           <Radio minH={"40px"} value='1'>Dennis Ricche</Radio>
-        <Radio minH={"40px"} value='2'>who are you </Radio>
+           <Radio minH={"40px"} value={assesmentData[questionNumber].options.op1}>{assesmentData[questionNumber].options.op1}</Radio>
+        <Radio minH={"40px"} value={assesmentData[questionNumber].options.op2}>{assesmentData[questionNumber].options.op2}</Radio>
         </Stack>
         
         </RadioGroup>
@@ -80,8 +148,8 @@ const Assesmentquiz = () => {
           <Stack    >
 
           
-           <Radio minH={"40px"} value='3'>Hello how fksjflksdjf kl ljsklf</Radio>
-        <Radio minH={"40px"} value='4'>who are you </Radio>
+           <Radio minH={"40px"} value={assesmentData[questionNumber].options.op3}>{assesmentData[questionNumber].options.op3}</Radio>
+        <Radio minH={"40px"} value={assesmentData[questionNumber].options.op4}>{assesmentData[questionNumber].options.op4} </Radio>
         </Stack>
         
         </RadioGroup>
@@ -93,23 +161,53 @@ const Assesmentquiz = () => {
 
          
          <HStack w={"full"} h={"80px"} mt={"20px"} >
-          <Button fontSize={"13px"} color={"white"} bgColor={"yellow.400"} w={"150px"} borderRadius={"0px"}>Previous </Button>
-          <Button fontSize={"13px"} w={"150px"} border={"1px solid blue"} borderRadius={"0px"}>Close</Button>
+          <Button fontSize={"13px"} color={"white"} bgColor={"yellow.400"} w={"150px"} borderRadius={"0px"} onClick={()=>{
+
+            if(questionNumber>0){
+            setQuestionNumber(questionNumber-1)
+            }
+          }}>Previous </Button>
+          <Button fontSize={"13px"}  onClick={onOpen} w={"150px"} border={"1px solid blue"} borderRadius={"0px"}>Close</Button>
           <Button fontSize={"13px"} color={"white"} bgColor={"red.600"} w={"170px"} borderRadius={"0px"}>Skip & answer Later(1)</Button>
           <Button fontSize={"13px"} color={"white"} bgColor={"yellow.500"} w={"170px"} borderRadius={"0px"}>Save & review later (1)</Button>
           <Button fontSize={"13px"}  color={"white"} bgColor={"green.500"} w={"170px"} borderRadius={"0px"}>Save & Next(1)</Button>
          </HStack>
        </HStack>
+       <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Do You Want To Close Your Assessment ?
+            </AlertDialogHeader>
 
+            <AlertDialogBody>
+              Are you sure? You can't undo this action afterwards.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Decline
+              </Button>
+              <Button colorScheme='red' onClick={onClose} ml={3}>
+                Accept
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
        <HStack w={"30%"}  bgColor={"white"}>
          
       
          
 
           <Box w={"full"} h={"450px"} px={"20px"}  overflowY={"scroll"}>
-            {Array(100).fill("").map((item,index)=>{
-          return   <Button m={"8px"} p={"0px"} bgColor={(onWhichQuestion===index)?"purple":"none"} shadow={"md"} color={(onWhichQuestion===index)?"white":"none"} onClick={()=>{
-            setOnWhichQuestion(index);
+            {assesmentData.map((item,index)=>{
+          return   <Button m={"8px"} p={"0px"} bgColor={(item.isCheckedAndSaved===true)?"green":(item.isSavedandReviewLater===true)?"yellow":(item.isSkiped===true)?"red":(questionNumber===index)?"purple":"none"}  shadow={"md"} color={(item.isCheckedAndSaved===true)?"white":(item.isSavedandReviewLater===true)?"white":(item.isSkiped===true)?"white":"none"} onClick={()=>{
+            setQuestionNumber(index);
            }} borderRadius={"50%"}>{index+1}</Button>
          })}
            </Box>
