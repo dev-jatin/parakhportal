@@ -14,6 +14,8 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
+import OS from "../asset/os.json";
+
 const Assesmentquiz = () => {
   const [isLanguange, setIsLanguange] = useState("English");
   const [onWhichQuestion, setOnWhichQuestion] = useState(0);
@@ -72,6 +74,22 @@ const Assesmentquiz = () => {
       timeTaken: 0,
     },
   ];
+
+  const fetchData = async () => {
+    let tmpOS = OS;
+
+    for (let i = 0; i < tmpOS.length; i++) {
+      const url = `https://parakh-1-g7033422.deta.app/get_categories/${OS[i]?.question}`;
+
+      const res = await fetch(url);
+      const json = await res.json();
+
+      tmpOS[i].level = json?.category;
+    }
+
+    console.log("son", OS);
+  };
+
   return (
     <HStack
       h={"100vh"}
@@ -91,7 +109,14 @@ const Assesmentquiz = () => {
           AI BASED PRE-LEARNING ASSESSMENT
         </Text>
 
-        <Button colorScheme="orange" borderRadius={"20%"} mr={"20px"}>
+        <Button
+          onClick={() => {
+            fetchData();
+          }}
+          colorScheme="orange"
+          borderRadius={"20%"}
+          mr={"20px"}
+        >
           SUBMIT
         </Button>
       </HStack>

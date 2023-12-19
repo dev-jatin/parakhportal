@@ -1,5 +1,6 @@
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 def determine_blooms_level(question):
    
@@ -38,6 +39,18 @@ def determine_blooms_level(question):
 
 app = FastAPI()
 
+
+app = FastAPI()
+
+origins = ["*"]  
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/get_categories/{question}")
 def get_categories(question: str):
